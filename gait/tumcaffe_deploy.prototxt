@@ -1,0 +1,178 @@
+name: "tumcaffe_deploy"
+input: "data"
+input_dim: 1
+input_dim: 50
+input_dim: 60
+input_dim: 60
+ 
+layer {
+  name: "layer1"
+  type: "Convolution"
+  bottom: "data"
+  top: "layer1"
+  convolution_param {
+    kernel_h: 7
+    kernel_w: 7
+    num_output: 96
+    stride: 1
+    pad: 0
+  }
+}
+
+layer {
+  name: "layer2"
+  type: "ReLU"
+  bottom: "layer1"
+  top: "layer2"
+}
+
+layer {
+  name: "layer3"
+  type: "Pooling"
+  bottom: "layer2"
+  top: "layer3"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 2
+    stride_h: 2
+    stride_w: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+
+layer {
+  name: "layer4"
+  type: "LRN"
+  bottom: "layer3"
+  top: "layer4"
+  lrn_param {
+    local_size: 5
+    k: 1.000000
+    alpha: 0.000100
+    beta: 0.750000
+  }
+}
+
+layer {
+  name: "layer5"
+  type: "Convolution"
+  bottom: "layer4"
+  top: "layer5"
+  convolution_param {
+    kernel_h: 5
+    kernel_w: 5
+    num_output: 192
+    stride: 2
+    pad: 0
+  }
+}
+
+layer {
+  name: "layer6"
+  type: "ReLU"
+  bottom: "layer5"
+  top: "layer6"
+}
+
+layer {
+  name: "layer7"
+  type: "Pooling"
+  bottom: "layer6"
+  top: "layer7"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 2
+    stride_h: 2
+    stride_w: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+
+layer {
+  name: "layer8"
+  type: "Convolution"
+  bottom: "layer7"
+  top: "layer8"
+  convolution_param {
+    kernel_h: 3
+    kernel_w: 3
+    num_output: 512
+    stride: 1
+    pad: 0
+  }
+}
+
+layer {
+  name: "layer9"
+  type: "ReLU"
+  bottom: "layer8"
+  top: "layer9"
+}
+
+layer {
+  name: "layer10"
+  type: "Pooling"
+  bottom: "layer9"
+  top: "layer10"
+  pooling_param {
+    pool: MAX
+    kernel_h: 2
+    kernel_w: 2
+    stride_h: 2
+    stride_w: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+
+layer {
+  name: "layer11"
+  type: "Convolution"
+  bottom: "layer10"
+  top: "layer11"
+  convolution_param {
+    kernel_h: 2
+    kernel_w: 2
+    num_output: 4096
+    stride: 1
+    pad: 0
+  }
+}
+
+layer {
+  name: "layer12"
+  type: "ReLU"
+  bottom: "layer11"
+  top: "layer12"
+}
+
+layer {
+  name: "layer13"
+  type: "InnerProduct"
+  bottom: "layer12"
+  top: "layer13"
+  inner_product_param {
+    num_output: 2048
+  }
+}
+
+layer {
+  name: "layer15"
+  type: "InnerProduct"
+  bottom: "layer13"
+  top: "layer15"
+  inner_product_param {
+    num_output: 155
+  }
+}
+
+layer {
+  name: "layer17"
+  type: "Softmax"
+  bottom: "layer15"
+  top: "prob"
+}
